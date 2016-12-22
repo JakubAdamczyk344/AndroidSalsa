@@ -49,9 +49,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     //Database connection and ListView>>
     private ListView mListView;
-    //public static final String URL = "https://api.learn2crack.com/android/jsonandroid/";
-    public static final String URL = "http://10.0.2.2/PGnauka/pehap.php"; //łączenie z localhost dla emulatora
-    //public static final String URL = "http://192.168.1.101:80/PGnauka/pehap.php"; //łączenie z localhost dla telefonu
+    public static final String URL = "http://www.projektgrupowy.cba.pl/pehap.php";
+    //public static final String URL = "http://10.0.2.2/PGnauka/pehap.php"; //łączenie z localhost dla emulatora
+    //public static final String URL = "http://192.168.1.104:80/PGnauka/pehap.php"; //łączenie z localhost dla telefonu
+    //public static final String URL = "http://192.168.1.102:80/PGnauka/connectCBA.php"; //łączenie z CBA dla telefonu
+    //public static final String URL = "http://10.0.2.2/PGnauka/connectCBA.php"; //łączenie z CBA dla telefonu
 
     private List<HashMap<String, String>> mEventMapList = new ArrayList<>();
 
@@ -229,8 +231,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         //compareCoordinates(54.36036036036036, 18.615272389032913, 54.048799, 16.221209);
         mGoogleApiClient.disconnect();
         mGoogleApiClient.connect();
+        AsyncGetUserInfo asyncGetUserInfo = new AsyncGetUserInfo();
+        asyncGetUserInfo.execute();
         //compareCoordinates();
         //updateUI();
+
 
     }
 
