@@ -1,6 +1,7 @@
 package com.example.kuba.AndroidSalsa;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.v4.app.ActivityCompat;
@@ -60,6 +61,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private static final String KEY_HOUR = "hour";
     private static final String KEY_CITY = "city";
     private static final String KEY_CITYBLOCK = "cityBlock";
+    private static final String KEY_DESCRIPTION = "description";
+    private static final String KEY_NAME = "name";
+    private static final String KEY_TOPAY = "toPay";
+    private static final String KEY_ADRESS = "adress";
+    private static final String KEY_ADMINISTRATORNAME = "administratorName";
+    private static final String KEY_TELEPHONENUMBER = "telephoneNumber";
+    private static final String KEY_EMAIL = "email";
+    private static final String KEY_KEYWORDS = "keywords";
     //Database connection and ListView<<
 
     @Override
@@ -176,6 +185,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             map.put(KEY_HOUR, event.getHour());
             map.put(KEY_CITY, event.getCity());
             map.put(KEY_CITYBLOCK, event.getCityBlock());
+            map.put(KEY_DESCRIPTION, event.getDescription());
+            map.put(KEY_NAME, event.getName());
+            map.put(KEY_TOPAY, event.getToPay());
+            map.put(KEY_ADRESS, event.getAdress());
+            map.put(KEY_ADMINISTRATORNAME, event.getAdministratorName());
+            map.put(KEY_TELEPHONENUMBER, event.getTelephoneNumber());
+            map.put(KEY_EMAIL, event.getEmail());
+            map.put(KEY_KEYWORDS, event.getKeywords());
 
             mEventMapList.add(map);
         }
@@ -192,14 +209,35 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-        Toast.makeText(this, mEventMapList.get(i).get(KEY_CITY),Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, mEventMapList.get(i).get(KEY_CITY),Toast.LENGTH_LONG).show();
+        //DescriptionActivity.description = mEventMapList.get(i).get(KEY_DESCRIPTION);
+        //showDescription();
+        Intent intent = new Intent(this, DescriptionActivity.class);
+        intent.putExtra("day", mEventMapList.get(i).get(KEY_DAY));
+        intent.putExtra("hour", mEventMapList.get(i).get(KEY_HOUR));
+        intent.putExtra("city", mEventMapList.get(i).get(KEY_CITY));
+        intent.putExtra("cityBlock", mEventMapList.get(i).get(KEY_CITYBLOCK));
+        intent.putExtra("description", mEventMapList.get(i).get(KEY_DESCRIPTION));
+        intent.putExtra("name", mEventMapList.get(i).get(KEY_NAME));
+        intent.putExtra("toPay", mEventMapList.get(i).get(KEY_TOPAY));
+        intent.putExtra("adress", mEventMapList.get(i).get(KEY_ADRESS));
+        intent.putExtra("administratorName", mEventMapList.get(i).get(KEY_ADMINISTRATORNAME));
+        intent.putExtra("telephoneNumber", mEventMapList.get(i).get(KEY_TELEPHONENUMBER));
+        intent.putExtra("email", mEventMapList.get(i).get(KEY_EMAIL));
+        intent.putExtra("keywords", mEventMapList.get(i).get(KEY_KEYWORDS));
+        startActivity(intent);
     }
+
+    /*public void showDescription(){
+        Intent intent = new Intent(this, DescriptionActivity.class);
+        startActivity(intent);
+    }*/
 
     private void loadListView() {
 
         ListAdapter adapter = new SimpleAdapter(MainActivity.this, mEventMapList, R.layout.list_item,
-                new String[] { KEY_DAY, KEY_HOUR, KEY_CITY, KEY_CITYBLOCK },
-                new int[] { R.id.day,R.id.hour, R.id.city, R.id.cityBlock }); //odwołanie do pól tekstowych z list_item.xml
+                new String[] { KEY_DAY, KEY_HOUR, KEY_CITY, KEY_CITYBLOCK, KEY_DESCRIPTION, KEY_NAME },
+                new int[] { R.id.day,R.id.hour, R.id.city, R.id.cityBlock, R.id.description, R.id.name }); //odwołanie do pól tekstowych z list_item.xml
 
         mListView.setAdapter(adapter);
 
