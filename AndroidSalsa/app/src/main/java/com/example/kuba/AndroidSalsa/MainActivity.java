@@ -32,9 +32,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         LoadJSONTask.Listener, AdapterView.OnItemClickListener {
 
     //GPS>>
-    private TextView txtOutputLat, txtOutputLon;
+    /*private TextView txtOutputLat, txtOutputLon;
     private TextView isConnectedText;
-    private TextView distanceText;
+    private TextView distanceText;*/
     private TextView searchRadiusText;
     private SeekBar searchRadiusSeekBar;
     private Button refreshButton;
@@ -77,10 +77,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         setContentView(R.layout.activity_main);
 
         //GPS>>
-        txtOutputLat = (TextView) findViewById(R.id.textView);
+        /*txtOutputLat = (TextView) findViewById(R.id.textView);
         txtOutputLon = (TextView) findViewById(R.id.textView2);
         isConnectedText = (TextView) findViewById((R.id.textView3));
-        distanceText = (TextView) findViewById((R.id.odleglosc));
+        distanceText = (TextView) findViewById((R.id.odleglosc));*/
         searchRadiusText = (TextView) findViewById((R.id.searchRadiusTextView));
         refreshButton = (Button) findViewById(R.id.odswiez);
         refreshButton.setOnClickListener(MainActivity.this);
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onConnected(Bundle bundle) {
 
-        isConnectedText.setText("Połączono z usługą google location");
+        //isConnectedText.setText("Połączono z usługą google location");
         mLocationRequest = LocationRequest.create();
         //mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         buildGoogleApiClient();
-        isConnectedText.setText("Brak połączenia");
+        //isConnectedText.setText("Brak połączenia");
     }
 
     synchronized void buildGoogleApiClient() {
@@ -249,9 +249,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         String latString=Double.toString(lat);
         String lonString=Double.toString(lon);
         String distanceString=Double.toString(distance);
-        txtOutputLat.setText(latString);
+        /*txtOutputLat.setText(latString);
         txtOutputLon.setText(lonString);
-        distanceText.setText(distanceString);
+        distanceText.setText(distanceString);*/
     }
 
     @Override

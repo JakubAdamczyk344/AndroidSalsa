@@ -6,9 +6,15 @@ import android.widget.TextView;
 
 public class DescriptionActivity extends AppCompatActivity {
 
-    /*private String day;
-    private String hour;
-    private String city;
+    private static String day;
+    private static String hour;
+    public static String getDay(){
+        return day;
+    }
+    public static String getHour(){
+        return hour;
+    }
+    /*private String city; //zastąpione zmiennymi lokalnymi
     private String cityBlock;
     private String description;
     private String name;
@@ -37,8 +43,8 @@ public class DescriptionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_description);
 
         Bundle bundle = getIntent().getExtras();
-        String day = bundle.getString("day");
-        String hour = bundle.getString("hour");
+        day = bundle.getString("day");
+        hour = bundle.getString("hour");
         String city = bundle.getString("city");
         String cityBlock = bundle.getString("cityBlock");
         String description = bundle.getString("description");
