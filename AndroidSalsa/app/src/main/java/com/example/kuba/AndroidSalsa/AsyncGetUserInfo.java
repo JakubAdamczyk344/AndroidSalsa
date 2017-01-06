@@ -11,15 +11,19 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
+import static com.example.kuba.AndroidSalsa.MainActivity.getLatitude;
+import static com.example.kuba.AndroidSalsa.MainActivity.getLongitude;
+import static com.example.kuba.AndroidSalsa.MainActivity.getSearchRadius;
+
 public class AsyncGetUserInfo extends AsyncTask<Void,Void,Void> {
+
+    private static String sessionID;
+
     @Override
     protected Void doInBackground(Void... params) {
 
         try {
-
-            URL url = new URL("http://www.projektgrupowy.cba.pl/getuserinfo.php?name=Kuba");
-            //URL url = new URL("http://192.168.1.104:80/PGnauka/dataRec.php?name=Kuba");
-            //URL url = new URL("http://10.0.2.2/PGnauka/dataRec.php?name=Kuba");
+            URL url = new URL("http://www.projektgrupowy.cba.pl/getuserinfo.php?longitude="+getLongitude()+"&latitude="+getLatitude()+"&searchRadius="+getSearchRadius());
             URLConnection connection = url.openConnection();
             connection.connect();
 
@@ -28,17 +32,22 @@ public class AsyncGetUserInfo extends AsyncTask<Void,Void,Void> {
 
             while((inputLine = in.readLine()) != null)
             {
-                System.out.println(inputLine);
+                if(inputLine.startsWith("sid=")){
+                    sessionID = inputLine.split("\\<", 2)[0];
+                    sessionID=sessionID.substring(4);
+                    System.out.println("SessionID from AsyncTask="+sessionID);
+                }
             }
-
             in.close();
 
         } catch (Exception e) {
-
-            //Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_LONG).show();
-
+            System.out.println("Error");
         }
 
         return null;
+    }
+
+    public static String getSessionID(){
+        return sessionID;
     }
 }

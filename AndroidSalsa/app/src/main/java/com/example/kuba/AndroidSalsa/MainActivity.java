@@ -27,33 +27,30 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import static com.example.kuba.AndroidSalsa.AsyncGetUserInfo.getSessionID;
+
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener, SeekBar.OnSeekBarChangeListener,
         LoadJSONTask.Listener, AdapterView.OnItemClickListener {
 
+    public static String sid = "0";
+
     //GPS>>
-    /*private TextView txtOutputLat, txtOutputLon;
-    private TextView isConnectedText;
-    private TextView distanceText;*/
     private TextView searchRadiusText;
     private SeekBar searchRadiusSeekBar;
     private Button refreshButton;
     private Location mLastLocation;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-    private double lat;
-    private double lon;
-    private double distance;
-    private int searchRadius;
+    private static double latitude;
+    private static double longitude;
+    private static int searchRadius;
+
     //GPS<<
 
     //Database connection and ListView>>
     private ListView mListView;
-    public static final String URL = "http://www.projektgrupowy.cba.pl/pehap.php";
-    //public static final String URL = "http://10.0.2.2/PGnauka/pehap.php"; //łączenie z localhost dla emulatora
-    //public static final String URL = "http://192.168.1.104:80/PGnauka/pehap.php"; //łączenie z localhost dla telefonu
-    //public static final String URL = "http://192.168.1.102:80/PGnauka/connectCBA.php"; //łączenie z CBA dla telefonu
-    //public static final String URL = "http://10.0.2.2/PGnauka/connectCBA.php"; //łączenie z CBA dla telefonu
+    //public static final String URL = "http://www.projektgrupowy.cba.pl/pehap.php?sid=" + getSessionID; //?longitude="+getLongitude()+"&latitude="+getLatitude()+"&searchRadius="+getSearchRadius();
 
     private List<HashMap<String, String>> mEventMapList = new ArrayList<>();
 
@@ -77,23 +74,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         setContentView(R.layout.activity_main);
 
         //GPS>>
-        /*txtOutputLat = (TextView) findViewById(R.id.textView);
-        txtOutputLon = (TextView) findViewById(R.id.textView2);
-        isConnectedText = (TextView) findViewById((R.id.textView3));
-        distanceText = (TextView) findViewById((R.id.odleglosc));*/
         searchRadiusText = (TextView) findViewById((R.id.searchRadiusTextView));
-        refreshButton = (Button) findViewById(R.id.odswiez);
+        refreshButton = (Button) findViewById(R.id.refreshButton);
         refreshButton.setOnClickListener(MainActivity.this);
         searchRadiusSeekBar = (SeekBar)findViewById(R.id.seekBar);
         searchRadiusSeekBar.setOnSeekBarChangeListener(this);
-
         buildGoogleApiClient();
+        searchRadius = 10;
+        String searchRadiusString=Double.toString(searchRadius);
+        searchRadiusText.setText(searchRadiusString);
         //GPS<<
 
         //Database connection and ListView>>
         mListView = (ListView) findViewById(R.id.list_view);
         mListView.setOnItemClickListener(this);
-        new LoadJSONTask(this).execute(URL);
         //Database connection and ListView<<
     }
 
@@ -101,8 +95,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
-        compareCoordinates();
-        updateUI();
     }
 
     @Override
@@ -114,9 +106,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onConnected(Bundle bundle) {
 
-        //isConnectedText.setText("Połączono z usługą google location");
         mLocationRequest = LocationRequest.create();
-        //mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(30000);
         mLocationRequest.setFastestInterval(30000);
@@ -128,22 +118,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
-    public void compareCoordinates() {
-        double radius = 6372.8; // In kilometers
-        double testLat=54.048799;
-        double testLon=16.221209;
-        double Latitude = lat;
-        double Longitude = lon;
-        double dLat = Math.toRadians(Latitude - testLat);
-        double dLon = Math.toRadians(Longitude - testLon);
-        testLat = Math.toRadians(testLat);
-        Latitude = Math.toRadians(Latitude);
-
-        double a = Math.pow(Math.sin(dLat / 2),2) + Math.pow(Math.sin(dLon / 2),2) * Math.cos(testLat) * Math.cos(Latitude);
-        double c = 2 * Math.asin(Math.sqrt(a));
-        distance =  radius * c;
-    }
-
     @Override
     public void onConnectionSuspended(int i) {
 
@@ -151,17 +125,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onLocationChanged(Location location) {
-        lat = location.getLatitude();
-        lon = location.getLongitude();
-        compareCoordinates();
-        updateUI();
-        //mGoogleApiClient.disconnect();
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         buildGoogleApiClient();
-        //isConnectedText.setText("Brak połączenia");
     }
 
     synchronized void buildGoogleApiClient() {
@@ -170,8 +140,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-
-
     }
     //Database connection and ListView>>
     @Override
@@ -209,9 +177,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-        //Toast.makeText(this, mEventMapList.get(i).get(KEY_CITY),Toast.LENGTH_LONG).show();
-        //DescriptionActivity.description = mEventMapList.get(i).get(KEY_DESCRIPTION);
-        //showDescription();
         Intent intent = new Intent(this, DescriptionActivity.class);
         intent.putExtra("day", mEventMapList.get(i).get(KEY_DAY));
         intent.putExtra("hour", mEventMapList.get(i).get(KEY_HOUR));
@@ -228,11 +193,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         startActivity(intent);
     }
 
-    /*public void showDescription(){
-        Intent intent = new Intent(this, DescriptionActivity.class);
-        startActivity(intent);
-    }*/
-
     private void loadListView() {
 
         ListAdapter adapter = new SimpleAdapter(MainActivity.this, mEventMapList, R.layout.list_item,
@@ -244,28 +204,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
     //Database connection and ListView<<
 
-    //GPS>>
-    void updateUI() {
-        String latString=Double.toString(lat);
-        String lonString=Double.toString(lon);
-        String distanceString=Double.toString(distance);
-        /*txtOutputLat.setText(latString);
-        txtOutputLon.setText(lonString);
-        distanceText.setText(distanceString);*/
-    }
-
     @Override
     public void onClick(View v) {
+        mListView.setAdapter(null);
+        mEventMapList.clear();
         mGoogleApiClient.disconnect();
         mGoogleApiClient.connect();
+        System.out.println(getSearchRadius());
         AsyncGetUserInfo asyncGetUserInfo = new AsyncGetUserInfo();
-        asyncGetUserInfo.execute();
-        //compareCoordinates();
-        //updateUI();
-
-
+        try {
+            asyncGetUserInfo.execute().get();
+        }
+        catch (Exception e){
+            System.out.println("Error");
+        }
+        sid=getSessionID();
+        System.out.println("Session ID from MainThread="+sid);
+        new LoadJSONTask(this).execute("http://www.projektgrupowy.cba.pl/pehap.php?sid=" + sid);
     }
-
 
     //method called when the progress bar is changed
     public void onProgressChanged(SeekBar searchRadiusSeekBar, int progress,
@@ -280,6 +236,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     //method called when the progress bar is released
     public void onStopTrackingTouch(SeekBar seekBar) {
     }
-    //GPS<<
+    public static double getLatitude(){
+        return latitude;
+    }
+    public static double getLongitude(){
+        return longitude;
+    }
+    public static int getSearchRadius(){
+        return searchRadius;
+    }
 }
 
