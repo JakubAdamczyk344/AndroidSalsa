@@ -27,7 +27,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import static com.example.kuba.AndroidSalsa.AsyncGetUserInfo.getSessionID;
+//import static com.example.kuba.AndroidSalsa.AsyncGetUserInfo.getSessionID;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener, SeekBar.OnSeekBarChangeListener,
@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         mGoogleApiClient.disconnect();
         mGoogleApiClient.connect();
         System.out.println(getSearchRadius());
-        AsyncGetUserInfo asyncGetUserInfo = new AsyncGetUserInfo();
+        /*AsyncGetUserInfo asyncGetUserInfo = new AsyncGetUserInfo();
         try {
             asyncGetUserInfo.execute().get();
         }
@@ -220,7 +220,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
         sid=getSessionID();
         System.out.println("Session ID from MainThread="+sid);
-        new LoadJSONTask(this).execute("http://www.projektgrupowy.cba.pl/pehap.php?sid=" + sid);
+        new LoadJSONTask(this).execute("http://www.projektgrupowy.cba.pl/pehap2.php?sid=" + sid);*/
+        new LoadJSONTask(this).execute("http://www.projektgrupowy.cba.pl/pehapOneThread.php?longitude=" + longitude + "&latitude=" + latitude + "&searchRadius=" + searchRadius);
     }
 
     //method called when the progress bar is changed
