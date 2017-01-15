@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:padding="5dp"
+        android:background="@color/colorAccent">
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/nameTextView"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:textColor="@color/common_google_signin_btn_text_dark_default" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="5dp">
+
+
+            <TextView
+                android:text="Dzień"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/textView5"
+                android:layout_weight="1"
+                tools:textSize="12sp"
+                android:gravity="bottom" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:id="@+id/dayTextView"
+                android:gravity="top"
+                tools:textSize="14sp"
+                tools:textStyle="bold" />
+
+            <TextView
+                android:text="Godzina"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/textView6"
+                android:layout_weight="1"
+                tools:textSize="12sp"
+                android:gravity="bottom"/>
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:id="@+id/hourTextView"
+                android:gravity="top"
+                tools:textSize="14sp"
+                tools:textStyle="bold"/>
+
+            <TextView
+                android:text="Miasto"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/textView7"
+                android:layout_weight="1"
+                tools:textSize="12sp"
+                android:gravity="bottom"/>
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:id="@+id/cityTextView"
+                android:gravity="top"
+                tools:textSize="14sp"
+                tools:textStyle="bold"/>
+
+            <TextView
+                android:text="Dzielnica"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/textView8"
+                android:layout_weight="1"
+                tools:textSize="12sp"
+                android:gravity="bottom"/>
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:id="@+id/cityBlockTextView"
+                android:gravity="top"
+                tools:textSize="14sp"
+                tools:textStyle="bold"/>
+
+            <TextView
+                android:text="Adres"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/textView9"
+                android:layout_weight="1"
+                tools:textSize="12sp"
+                android:gravity="bottom"/>
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:id="@+id/adressTextView"
+                android:gravity="top"
+                tools:textSize="14sp"
+                tools:textStyle="bold"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#c0c0c0"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:padding="5dp">
+
+            <TextView
+                android:text="Taniec"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/textView11"
+                android:layout_weight="1"
+                tools:textSize="12sp"
+                android:gravity="bottom" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:id="@+id/keywordsTextView"
+                android:gravity="top"
+                tools:textSize="14sp"
+                tools:textStyle="bold" />
+
+            <TextView
+                android:text="Płatność [zł]"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/textView12"
+                android:layout_weight="1"
+                tools:textSize="12sp"
+                android:gravity="bottom" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:id="@+id/toPayTextView"
+                android:gravity="top"
+                tools:textSize="14sp"
+                tools:textStyle="bold" />
+
+            <TextView
+                android:text="Organizator"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/textView13"
+                android:layout_weight="1"
+                tools:textSize="12sp"
+                android:gravity="bottom" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:id="@+id/administratorNameTextView"
+                android:gravity="top"
+                tools:textSize="14sp"
+                tools:textStyle="bold" />
+
+            <TextView
+                android:text="Telefon"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/textView14"
+                android:layout_weight="1"
+                tools:textSize="12sp"
+                android:gravity="bottom" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:id="@+id/telephoneNumberTextView"
+                android:gravity="top"
+                tools:textSize="14sp"
+                tools:textStyle="bold" />
+
+            <TextView
+                android:text="Email"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/textView15"
+                android:layout_weight="1"
+                tools:textSize="12sp"
+                android:gravity="bottom" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:id="@+id/emailTextView"
+                android:gravity="top"
+                tools:textSize="14sp"
+                tools:textStyle="bold" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#c0c0c0"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:padding="5dp">
+
+        <TextView
+            android:text="Opis imprezy:"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/textView10"
+            tools:textSize="12sp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:id="@+id/descriptionTextView"
+            tools:textSize="14sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="5dp">
+
+        <Button
+            android:text="Zapisz wydarzenie w kalendarzu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/addToCalendarButton"
+            android:backgroundTint="@color/colorAccent"
+            android:onClick="addEventToCalendar" />
+    </LinearLayout>
+</LinearLayout>
