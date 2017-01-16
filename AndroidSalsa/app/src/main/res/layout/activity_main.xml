@@ -52,7 +52,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/refreshButton"
                 android:layout_gravity="center_vertical"
-                android:backgroundTint="@color/colorAccent" />
+                android:backgroundTint="@color/colorAccent"
+                android:onClick="Refresh"/>
 
         </LinearLayout>
 

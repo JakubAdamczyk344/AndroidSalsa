@@ -27,13 +27,9 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-//import static com.example.kuba.AndroidSalsa.AsyncGetUserInfo.getSessionID;
-
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener, SeekBar.OnSeekBarChangeListener,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, SeekBar.OnSeekBarChangeListener,
         LoadJSONTask.Listener, AdapterView.OnItemClickListener {
-
-    public static String sid = "0";
 
     //GPS>>
     private TextView searchRadiusText;
@@ -45,12 +41,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private static double latitude;
     private static double longitude;
     private static int searchRadius;
-
     //GPS<<
 
     //Database connection and ListView>>
     private ListView mListView;
-    //public static final String URL = "http://www.projektgrupowy.cba.pl/pehap.php?sid=" + getSessionID; //?longitude="+getLongitude()+"&latitude="+getLatitude()+"&searchRadius="+getSearchRadius();
 
     private List<HashMap<String, String>> mEventMapList = new ArrayList<>();
 
@@ -75,8 +69,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         //GPS>>
         searchRadiusText = (TextView) findViewById((R.id.searchRadiusTextView));
-        refreshButton = (Button) findViewById(R.id.refreshButton);
-        refreshButton.setOnClickListener(MainActivity.this);
         searchRadiusSeekBar = (SeekBar)findViewById(R.id.seekBar);
         searchRadiusSeekBar.setOnSeekBarChangeListener(this);
         buildGoogleApiClient();
@@ -204,23 +196,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
     //Database connection and ListView<<
 
-    @Override
-    public void onClick(View v) {
+    public void Refresh(View v) {
         mListView.setAdapter(null);
         mEventMapList.clear();
         mGoogleApiClient.disconnect();
         mGoogleApiClient.connect();
-        System.out.println(getSearchRadius());
-        /*AsyncGetUserInfo asyncGetUserInfo = new AsyncGetUserInfo();
-        try {
-            asyncGetUserInfo.execute().get();
-        }
-        catch (Exception e){
-            System.out.println("Error");
-        }
-        sid=getSessionID();
-        System.out.println("Session ID from MainThread="+sid);
-        new LoadJSONTask(this).execute("http://www.projektgrupowy.cba.pl/pehap2.php?sid=" + sid);*/
         new LoadJSONTask(this).execute("http://www.projektgrupowy.cba.pl/pehapOneThread.php?longitude=" + longitude + "&latitude=" + latitude + "&searchRadius=" + searchRadius);
     }
 
@@ -236,15 +216,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
     //method called when the progress bar is released
     public void onStopTrackingTouch(SeekBar seekBar) {
-    }
-    public static double getLatitude(){
-        return latitude;
-    }
-    public static double getLongitude(){
-        return longitude;
-    }
-    public static int getSearchRadius(){
-        return searchRadius;
     }
 }
 
