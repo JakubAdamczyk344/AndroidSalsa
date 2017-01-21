@@ -1,9 +1,5 @@
 package com.example.kuba.AndroidSalsa;
 
-/**
- * Created by Kuba on 2016-11-30.
- */
-
 import android.os.AsyncTask;
 
 import com.google.gson.Gson;

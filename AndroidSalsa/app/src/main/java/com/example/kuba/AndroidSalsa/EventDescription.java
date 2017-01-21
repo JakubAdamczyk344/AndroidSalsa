@@ -1,9 +1,5 @@
 package com.example.kuba.AndroidSalsa;
 
-/**
- * Created by Kuba on 2016-11-30.
- */
-
 public class EventDescription {
     //inicjalizacja zmiennych odpowiedzialnych za przechowywanie danych o wydarzeniu
     private String day;

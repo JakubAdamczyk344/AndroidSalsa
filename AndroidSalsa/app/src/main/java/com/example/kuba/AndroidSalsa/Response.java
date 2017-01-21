@@ -1,9 +1,5 @@
 package com.example.kuba.AndroidSalsa;
 
-/**
- * Created by Kuba on 2016-11-30.
- */
-
 import java.util.ArrayList;
 import java.util.List;
 
