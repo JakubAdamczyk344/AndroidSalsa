@@ -12,6 +12,7 @@ import java.util.Calendar;
 
 public class DescriptionActivity extends AppCompatActivity {
 
+    //inicjalizacja zmiennych odpowiedzialnych za przechowywanie danych o wydarzeniu
     private String day;
     private String hour;
     private String city;
@@ -25,12 +26,17 @@ public class DescriptionActivity extends AppCompatActivity {
     private String email;
     private String keywords;
 
+    //metoda wywoływana przy utworzeniu obiektu klasy DescriptionActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_description);
+        setContentView(R.layout.activity_description); //powiązanie obiektu klasy DescriptionActivity
+        //z plikiem activity_description przechowującym layout okna zawierającego informacje o wybranym wydarzeniu
 
-        Bundle bundle = getIntent().getExtras();
+        Bundle bundle = getIntent().getExtras(); //zaczerpnięcie danych z obiektu bundle klasy Bundle
+        //pliki bundle są plikami przechowującymi zmienne lokalne
+
+        //przypisanie zmiennym wartości zmiennych o tych samych nazwach zapisanych w bundle
         day = bundle.getString("day");
         hour = bundle.getString("hour");
         city = bundle.getString("city");
@@ -44,6 +50,7 @@ public class DescriptionActivity extends AppCompatActivity {
         email = bundle.getString("email");
         keywords = bundle.getString("keywords");
 
+        //powiązanie obiektów klasy pole tekstowe zdefiniowanym w tej klasie z polami tekstowymi z layoutu activity_description
         TextView dayTextView = (TextView) findViewById(R.id.dayTextView);
         TextView hourTextView = (TextView) findViewById(R.id.hourTextView);
         TextView cityTextView = (TextView) findViewById(R.id.cityTextView);
@@ -57,6 +64,7 @@ public class DescriptionActivity extends AppCompatActivity {
         TextView emailTextView = (TextView) findViewById(R.id.emailTextView);
         TextView keywordsTextView = (TextView) findViewById(R.id.keywordsTextView);
 
+        //przypisanie zdefiniowanym wyżej polom tekstowym wartości pobranych z obiektu bundle
         dayTextView.setText(day);
         hourTextView.setText(hour);
         cityTextView.setText(city);

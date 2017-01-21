@@ -5,6 +5,7 @@ package com.example.kuba.AndroidSalsa;
  */
 
 public class EventDescription {
+    //inicjalizacja zmiennych odpowiedzialnych za przechowywanie danych o wydarzeniu
     private String day;
     private String hour;
     private String city;
@@ -18,6 +19,7 @@ public class EventDescription {
     private String email;
     private String keywords;
 
+    //definicja getterów zwracających dane na temat wydarzenia
     public String getDay() {
         return day;
     }

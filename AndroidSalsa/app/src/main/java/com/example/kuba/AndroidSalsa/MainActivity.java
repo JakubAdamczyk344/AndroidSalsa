@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SeekBar;
@@ -31,24 +30,26 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         GoogleApiClient.OnConnectionFailedListener, LocationListener, SeekBar.OnSeekBarChangeListener,
         LoadJSONTask.Listener, AdapterView.OnItemClickListener {
 
-    //GPS>>
-    private TextView searchRadiusText;
-    private SeekBar searchRadiusSeekBar;
-    private Button refreshButton;
-    private Location mLastLocation;
-    private GoogleApiClient mGoogleApiClient;
-    private LocationRequest mLocationRequest;
-    private static double latitude;
-    private static double longitude;
-    private static int searchRadius;
+    //definicja pól  i obiektów wykorzystwanych w procesie określania lokalizacji użytkownika
+    private TextView searchRadiusText; //pole tekstowe wyświetlające wybrany przez użytkownika promień poszukiwań
+    private SeekBar searchRadiusSeekBar; //suwak do wyboru promienia poszukiwań
+    private Location mLastLocation; //obiekt klasy Location przechowujący dane o lokalizacji użytkownika
+    private GoogleApiClient mGoogleApiClient; //obiekt klasy zawierającej metody do korzystania z usług Google
+    private LocationRequest mLocationRequest; //obiekt zawierający informacje o żądaniu lokalizacji
+    private static double latitude; //pole przechowujące szerokość geograficzną użytkownika
+    private static double longitude; //pole przechowujące długość geograficzną użytkownika
+    private static int searchRadius; //pole przechowujące promień poszukiwań
     //GPS<<
 
-    //Database connection and ListView>>
-    private ListView mListView;
+    //definicja pól i obiektów wykorzystywanych do utworzenia listy znalezionych wydarzeń
+    private ListView mListView; //lista
 
-    private List<HashMap<String, String>> mEventMapList = new ArrayList<>();
+    private List<HashMap<String, String>> mEventMapList = new ArrayList<>(); //definicja obiektu klasy HashMap
+    //jest to tablica, w której przechowywane są szczegółowe dane na temat każdego z wydarzeń, które zostaje przesłane
+    //z serwera jako wydarzenie znajdujące się w promieniu wyszukiwań
 
-    private static final String KEY_DAY = "day"; //klucz, wg którego wartości wyciągane są z bazy danych?
+    //defiinicja klczy, za pomocą których dane są pobierane z tabeli mEventMapList
+    private static final String KEY_DAY = "day";
     private static final String KEY_HOUR = "hour";
     private static final String KEY_CITY = "city";
     private static final String KEY_CITYBLOCK = "cityBlock";
@@ -60,49 +61,46 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private static final String KEY_TELEPHONENUMBER = "telephoneNumber";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_KEYWORDS = "keywords";
-    //Database connection and ListView<<
 
+    //metoda wywoływana po utworzeniu okna
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main); //ustawienie layoutu activity_main jako
+        //layoutu tworzonego okna
 
-        //GPS>>
+        //powiązanie zdefiniowanych w tej klasie pola tekstowego i suwaka  z obiektami w layoucie
         searchRadiusText = (TextView) findViewById((R.id.searchRadiusTextView));
         searchRadiusSeekBar = (SeekBar)findViewById(R.id.seekBar);
+        //ustawienie listenera wykrywającego zmianę wartości ustawionej na suwaku
         searchRadiusSeekBar.setOnSeekBarChangeListener(this);
-        buildGoogleApiClient();
-        searchRadius = 10;
-        String searchRadiusString=Double.toString(searchRadius);
-        searchRadiusText.setText(searchRadiusString);
-        //GPS<<
+        buildGoogleApiClient(); //metoda inicjująca pracę obiektu klasy GoogleApiClient zdefiniowanego wyżej
+        searchRadius = 10; //ustawienie domyślnej wartości promienia poszukiwań
+        String searchRadiusString=Double.toString(searchRadius); //przekonwertowanie wartości promienia poszukiwań do
+        //String w celu wykorzystania go w polu tekstowym
+        searchRadiusText.setText(searchRadiusString); //ustawienie wartości pola tekstowego
 
-        //Database connection and ListView>>
+        //powiązanie zdefiniowanej w tej klasie listy z listą zdefiniowaną w layoucie
+        //i ustawienie listenera wykrywającego kliknięcie w jeden z obiektów listy
         mListView = (ListView) findViewById(R.id.list_view);
         mListView.setOnItemClickListener(this);
-        //Database connection and ListView<<
+
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
-    }
+    @Override //metoda wywoływana po połączeniu z Usługami Google Play
+    public void onConnected(Bundle bundle) { //argumetem metody jest obiekt klasy Bundle w którym przechowywane są zmienne i za
+        //pomocą którego są przesyłane między aktywnościami (oknami)
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mGoogleApiClient.disconnect();
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-
-        mLocationRequest = LocationRequest.create();
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(30000);
-        mLocationRequest.setFastestInterval(30000);
+        mLocationRequest = LocationRequest.create(); //utworzenie zapytania o lokalizację
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY); //ustanowienie priorytetu zapytania
+        //high accuracy oznacza, że poza sieciami WiFi i danymi z wież telefonii komórkowych zostanie również wykorzystany GPS
+        mLocationRequest.setInterval(30000); //ustawienie interwału czasowego z jakim pobierane są informacje o lokalizacji
+        //(w milisekundach)
+        mLocationRequest.setFastestInterval(30000); //ustawienie najkrótszego interwału czasowego
+        //metoda umożliwiająca update lokalizacji użytkownika
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        //instrukcja warunkowa sprawdzająca, czy aplikacji zostały przyznane uprawnienia do pobierania lokalizacji
+        //(czy plik manifest zawiera odpowiednie zezwolenia)
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
@@ -115,13 +113,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     }
 
-    @Override
+    @Override //metoda wywoływana po pierwszym odczycie lokalizacji i po jej zmianie
     public void onLocationChanged(Location location) {
-        latitude = location.getLatitude();
+        latitude = location.getLatitude(); //przypisanie długości i szerogości geograficznej do zdefiniowanych wcześniej pól
         longitude = location.getLongitude();
     }
 
-    @Override
+    @Override //metoda wywoływana po nieudanej próbie dostępu do Usług Google Play
     public void onConnectionFailed(ConnectionResult connectionResult) {
         buildGoogleApiClient();
     }
@@ -133,15 +131,19 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 .addApi(LocationServices.API)
                 .build();
     }
-    //Database connection and ListView>>
-    @Override
+
+    @Override //metoda wywoływana po załadowaniu listy wydarzeń
+    //argumentem jest lista obiektów klasy EventDescription (klasa ta zawiera szczegółowe informacje na temat wydarzenia)
     public void onLoaded(List<EventDescription> eventList) {
 
-        for (EventDescription event : eventList) {
+        for (EventDescription event : eventList) { //pętla wywoływana dla każdego obiektu event klasy EventDescription
+            //czyli dla każdego wydarzenia otrzymanego za pomocą JSON-a z serwera
 
-            HashMap<String, String> map = new HashMap<>();
+            HashMap<String, String> map = new HashMap<>(); //stworzenie nowej tablicy klasy HashMap
 
-            map.put(KEY_DAY, event.getDay()); //wpisanie wartosci do listy
+            //wczytanie do tablicy informacji na temat wydarzenia, informacje pobierane z obiektu event za pomocą
+            //zdefiniowanych w klasie EventDescription i przypisywane są im klucze zdefiniowane wyżej
+            map.put(KEY_DAY, event.getDay());
             map.put(KEY_HOUR, event.getHour());
             map.put(KEY_CITY, event.getCity());
             map.put(KEY_CITYBLOCK, event.getCityBlock());
@@ -154,22 +156,28 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             map.put(KEY_EMAIL, event.getEmail());
             map.put(KEY_KEYWORDS, event.getKeywords());
 
+            //dodanie informacji na temat wydarzenia do HashMapy mEventMapList przechowującej informacje
+            //o wszystkich przesłanych wydarzeniach
             mEventMapList.add(map);
         }
-
+        //załadowanie listy
         loadListView();
     }
 
-    @Override
+    @Override //metoda wywołana przy błędzie wcztywania danych do listy
     public void onError() {
 
         Toast.makeText(this, "Error !", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
+    @Override //metoda wywoływana po kliknięciu w wydarzenie z list
+    //licznik i zawiera informację o tym, które wydarzenie zostało kliknięte
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+        //utworzenie nowego okna klasy DescriptionActivity (opis wybranego wydarzenia)
         Intent intent = new Intent(this, DescriptionActivity.class);
+        //przesłanie do nowego okna informacji na temat klikniętego wydarzenia
+        //argumenty: nazwia zmiennej oraz jej wartość wczytana z HashMapy przechowującej informacje na temat wydarzeń
         intent.putExtra("day", mEventMapList.get(i).get(KEY_DAY));
         intent.putExtra("hour", mEventMapList.get(i).get(KEY_HOUR));
         intent.putExtra("city", mEventMapList.get(i).get(KEY_CITY));
@@ -185,36 +193,47 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         startActivity(intent);
     }
 
+    //metoda powodująca wczytanie listy wydarzeń
     private void loadListView() {
-
+        //definicja adaptera listy, którego zadaniem jest powiązanie listy z layoutem
         ListAdapter adapter = new SimpleAdapter(MainActivity.this, mEventMapList, R.layout.list_item,
+                //utworzenie tablicy z kluczami dostępu do informacji o wydarzeniach
                 new String[] { KEY_DAY, KEY_HOUR, KEY_CITY, KEY_CITYBLOCK, KEY_DESCRIPTION, KEY_NAME },
-                new int[] { R.id.day,R.id.hour, R.id.city, R.id.cityBlock, R.id.description, R.id.name }); //odwołanie do pól tekstowych z list_item.xml
+                //utworzenie tablicy przechowującej identyfikatory pól tekstowych, do których zostaną
+                //wczytane informacje o wydarzeniu
+                new int[] { R.id.day,R.id.hour, R.id.city, R.id.cityBlock, R.id.description, R.id.name });
 
         mListView.setAdapter(adapter);
 
     }
-    //Database connection and ListView<<
 
+    //metoda wywoływana po kliknięciu na przycisk "Odśwież" w głównym oknie aplikacji
     public void Refresh(View v) {
+        //wyczyszczenie listy wydarzeń
         mListView.setAdapter(null);
         mEventMapList.clear();
+        //rozłączenie z klientem lokalizacji i ponowne połączenie (w celu odświeżenia lokalizacji)
         mGoogleApiClient.disconnect();
         mGoogleApiClient.connect();
-        new LoadJSONTask(this).execute("http://www.projektgrupowy.cba.pl/pehapOneThread.php?longitude=" + longitude + "&latitude=" + latitude + "&searchRadius=" + searchRadius);
+        //wysłanie za pomocą metody GET danych o lokalizacji użytkownika i promieniu poszukiwań do
+        //skryptu php, którego zadaniem jest przetworzenie ich i odesłanie wydarzeń będących
+        //w promieniu
+        new LoadJSONTask(this).execute("http://www.projektgrupowy.cba.pl/datacompute.php?longitude=" + longitude + "&latitude=" + latitude + "&searchRadius=" + searchRadius);
     }
 
-    //method called when the progress bar is changed
+    //metoda wywoływana po zmianie wartości suwaka
     public void onProgressChanged(SeekBar searchRadiusSeekBar, int progress,
                                   boolean fromUser) {
-        searchRadius = progress+1;
+        searchRadius = progress+1; //przypisanie wartości z paska promieniowi poszukiwań
+        //jest ona zwiększona o 1, bo wartości suwaka rozpoczynają się od 0, najmniejszy
+        //jaki może ustawić użytkownik to 1
+        //konwersja promienia do Stringa i wstawienie go do pola tekstowego
         String searchRadiusString=Double.toString(searchRadius);
         searchRadiusText.setText(searchRadiusString);
     }
-    //method called when the progress bar is first touched
+    //pozostałe metody obsługujące pasek, których definicja jest wymagana do kompilacji kodu
     public void onStartTrackingTouch(SeekBar seekBar) {
     }
-    //method called when the progress bar is released
     public void onStopTrackingTouch(SeekBar seekBar) {
     }
 }
