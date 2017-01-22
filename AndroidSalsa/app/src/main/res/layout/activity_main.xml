@@ -36,13 +36,14 @@
                 android:progress="10"
                 android:max="49"
                 android:id="@+id/seekBar"
-                android:layout_weight="1"
+                android:layout_weight="5"
                 android:layout_gravity="center_vertical" />
 
             <TextView
                 android:text="TextView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:id="@+id/searchRadiusTextView"
                 android:layout_gravity="center_vertical" />
 

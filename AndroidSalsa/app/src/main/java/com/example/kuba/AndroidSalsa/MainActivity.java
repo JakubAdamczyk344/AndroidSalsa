@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         //jest ona zwiększona o 1, bo wartości suwaka rozpoczynają się od 0, najmniejszy
         //jaki może ustawić użytkownik to 1
         //konwersja promienia do Stringa i wstawienie go do pola tekstowego
-        String searchRadiusString=Double.toString(searchRadius);
+        String searchRadiusString=Integer.toString(searchRadius) + " km";
         searchRadiusText.setText(searchRadiusString);
     }
     //pozostałe metody obsługujące pasek, których definicja jest wymagana do kompilacji kodu
